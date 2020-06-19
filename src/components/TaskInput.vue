@@ -1,6 +1,6 @@
 <template>
     <div>
-       <input v-model="text" v-on:input="$emit('eventInput',text)" type="text" />
+       <input v-model="task" v-on:input="$emit('eventInput',taskname)" type="text" />
     </div>
 </template>
 
@@ -8,7 +8,7 @@
     export default {
          data() {
             return {
-                text:0
+                task:0
             }
         },
     }
