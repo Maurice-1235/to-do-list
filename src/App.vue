@@ -1,18 +1,43 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="list" v-bind:disable="checked">
+    <b-row>
+      <b-col>
+        <input class="checkmark" type="checkbox" v-model="checked" />
+      </b-col>
+      <b-col>
+        <b-row>
+          <!-- <TaskInput v-on:eventInput="number=$event"></TaskInput> -->
+        </b-row>
+        <b-row>
+        <TaskList></TaskList>
+        <div class="button" variant="primary" v-on:click="edit">
+          <b-icon icon="pencil">pencil</b-icon>
+        </div>
+        <div class="button" variant="danger" v-on:click="deleteI">
+          <b-icon icon="trash"></b-icon>
+        </div>
+        </b-row>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import TaskList from './components/TaskList.vue'
+// import TaskInput from './components/TaskInput.vue'
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: { 
+   TaskList,
+  //  TaskInput
+   },
+  data(){
+    return{
+      content:"Halo",
+      checked:false,
+    }
+  },
 }
 </script>
 
