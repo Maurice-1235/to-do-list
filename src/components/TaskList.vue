@@ -9,7 +9,10 @@
     />
     <b-container>
       <div v-for="(item, index) in taskmodel" :key="index">
-        <Task v-bind:task="{item}"></Task>
+        <Task v-bind:task="{item}" @moveToTaskdone="moveToTaskdone" @movetoTaskmodel="moveToTaskmodel"></Task>
+      </div>
+      <div v-for="(item, index) in taskdone" :key="'a' + index">
+        <Task v-bind:task="{item}" @moveToTaskdone="moveToTaskdone" @movetoTaskmodel="moveToTaskmodel"></Task>
       </div>
     </b-container>
   </div>
@@ -24,13 +27,30 @@ export default {
   data() {
     return {
       inputtext: "",
-      taskmodel: []
+      taskmodel: [],
+      taskdone: []
     };
   },
   methods: {
     addTask: function() {
       this.taskmodel.push({ taskname: this.inputtext, taskchecked: false });
       this.inputtext = "";
+    },
+    moveToTaskdone: function(item) {
+      this.taskdone.push({ taskname: item[0], taskchecked: true });
+      this.removeItemFromListByName(item[0], this.taskmodel);
+    },
+    moveToTaskmodel: function(item) {
+      console.log("moveback");
+      this.taskmodel.push({ taskname: item[0], taskchecked: false });
+      this.removeItemFromListByName(item[0], this.taskdone);
+    },
+    removeItemFromListByName(itemname, itemlist) {
+      itemlist.forEach(function(item) {
+        if (item.taskname == itemname) {
+          itemlist.splice(itemlist.indexOf(item), 1);
+        }
+      });
     }
   }
 };
