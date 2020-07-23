@@ -1,27 +1,48 @@
 <template>
-  <b-row class="taskcontainer" v-bind:class="{checked : task.item.taskchecked}">
+  <b-row class="taskcontainer" v-bind:class="{checked : task.item.checked}">
     <b-col cols="1">
-      <!-- <input type="checkbox" class="taskcheck" v-model="task.item.taskchecked" v-on:click="sortTaskModel(task.item)" /> -->
-      <input type="checkbox" class="taskcheck" v-model="task.item.taskchecked" v-on:click="sortTaskModel(task.item)" />
+      <input
+        type="checkbox"
+        class="taskcheck"
+        v-model="task.item.checked"
+        v-on:click="sortTaskModel(task.item, $event)"
+      />
     </b-col>
-    <b-col cols="11">{{task.item.taskname}}</b-col>
+    <b-col cols="11">{{task.item.text}}</b-col>
   </b-row>
 </template>
 
 <script>
 export default {
   props: {
-    task: Object
+    task: Object,
+  },
+  computed: {
+    listItems() {
+      return this.$store.state.listItems;
+    },
+    finishedItems() {
+      return this.$store.state.finishedItems;
+    },
   },
   methods: {
-    sortTaskModel: function(item) {
-      if (!item.taskchecked) {
-        // console.log('moveToTaskdone');
-        this.$emit('moveToTaskdone', [item.taskname, item.taskchecked]);
+    sortTaskModel: function (item, event) {
+      event.preventDefault();
+      if (!item.checked) {
+        this.finishedItems.push({ text: this.task.item.text, checked: true });
+        this.removeItemFromListByName(this.task.item.text, this.listItems);
       } else {
-        this.$emit('moveToTaskmodel', [item.taskname, item.taskchecked]);
+        this.listItems.push({ text: this.task.item.text, checked: false });
+        this.removeItemFromListByName(this.task.item.text, this.finishedItems);
       }
-    }
+    },
+    removeItemFromListByName(itemname, itemlist) {
+      itemlist.forEach(function (item) {
+        if (item.text == itemname) {
+          itemlist.splice(itemlist.indexOf(item), 1);
+        }
+      });
+    },
   },
 };
 </script>
